@@ -8,14 +8,21 @@
     "start": "next start"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "@prisma/client": "^2.21.2",
     "@types/nodemailer": "^6.4.1",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
     "next": "latest",
     "next-auth": "^3.19.7",
     "nodemailer": "^6.6.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-select": "^4.3.0"
+    "react-moment": "^1.1.1",
+    "react-select": "^4.3.0",
+    "swr": "^0.5.6"
   },
   "devDependencies": {
     "@types/node": "^15.0.1",

@@ -55,6 +55,8 @@ model User {
   comments Comment[]
   votes    Vote[]
 
+  joinedSubs Subreddit[]
+
   @@map(name: "users")
 }
 
@@ -70,40 +72,53 @@ model VerificationRequest {
 }
 
 model Subreddit {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  posts Post[]
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  displayName String
+  infoBoxText String
+  createdAt   DateTime @default(now())
+  posts       Post[]
+  joinedUsers User[]
 }
 
 model Post {
   id          Int       @id @default(autoincrement())
   title       String
-  body        String?
+  body        String
   subreddit   Subreddit @relation(fields: [subredditId], references: [id])
   comments    Comment[]
   user        User      @relation(fields: [userId], references: [id])
   votes       Vote[]
   subredditId Int
   userId      Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Comment {
-  id     Int     @id @default(autoincrement())
-  body   String?
-  user   User    @relation(fields: [userId], references: [id])
-  votes  Vote[]
-  post   Post    @relation(fields: [postId], references: [id])
-  userId Int
-  postId Int
+  id        Int      @id @default(autoincrement())
+  body      String?
+  user      User     @relation(fields: [userId], references: [id])
+  votes     Vote[]
+  post      Post     @relation(fields: [postId], references: [id])
+  userId    Int
+  postId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Vote {
-  id         Int      @id @default(autoincrement())
-  isDownVote Boolean
-  user       User     @relation(fields: [userId], references: [id])
-  post       Post?    @relation(fields: [postId], references: [id])
-  comment    Comment? @relation(fields: [commentId], references: [id])
-  userId     Int
-  postId     Int?
-  commentId  Int?
+  id        Int      @id @default(autoincrement())
+  voteType  VoteType
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post?    @relation(fields: [postId], references: [id])
+  comment   Comment? @relation(fields: [commentId], references: [id])
+  userId    Int
+  postId    Int?
+  commentId Int?
+}
+
+enum VoteType {
+  UPVOTE
+  DOWNVOTE
 }

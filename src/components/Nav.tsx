@@ -3,27 +3,19 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Select from "react-select";
+import useSWR from "swr";
+import { fetchData } from "../utils";
 
 export default function Nav() {
   const router = useRouter();
   const [session, loading] = useSession();
 
-  const [subReddits, setSubReddits] = useState([]);
-
-  const fetchSubs = async () => {
-    const res = await fetch("/api/subreddit");
-    const subreddits = await res.json();
-    setSubReddits(subreddits);
-  };
-
-  useEffect(() => {
-    fetchSubs();
-  }, []);
+  const { data, error } = useSWR(`/api/subreddit`, fetchData);
 
   const subToOptions = () => {
-    if (subReddits.length < 1) return;
+    if (!data) return;
 
-    const options = subReddits.map((sub) => ({
+    const options = data.map((sub) => ({
       value: sub.id,
       label: sub.name,
     }));
@@ -46,6 +38,7 @@ export default function Nav() {
       <div className="w-full mr-4 md:w-1/3 md:mr-0">
         <Select
           options={subToOptions()}
+          instanceId="subSearch"
           onChange={(e) => {
             router.push(`/r/${e.label}`);
           }}
